@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 #include "player.hpp"
 #include "card.hpp"
 using namespace std;
@@ -17,6 +18,7 @@ class Game
         Player& player2;
         int totalTurns = 0;
         int totalGames = 0;
+        int totalDraw = 0;
         string gameLog;
         string lastTurn;
         vector<Card> cards;

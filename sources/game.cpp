@@ -86,20 +86,24 @@ void Game::playTurn()
     }
     else
     {
+        this->totalTurns++;
         Card card1 = this->player1.getCard();
         Card card2 = this->player2.getCard();
         this->player1.removeCard();
         this->player2.removeCard();
-        this->totalTurns++;
+        cout << "first P1: " << player1.stacksize() << endl;
+        cout << "first P2: " << player1.stacksize() << endl;
         if (card1.getValue() > card2.getValue())
         {
             this->player1.addCardsWon();
+            cout << "second P1: " << player1.stacksize() << endl;
             this->lastTurn = this->player1.name + " Won The Turn\n";
             this->gameLog += this->lastTurn + player1.name + "Won the Turn\n";
         }
         else if (card1.getValue() < card2.getValue())
         {
             this->player2.addCardsWon();
+            cout << "third P2: " << player1.stacksize() << endl;
             this->lastTurn = this->player2.name + " Won The Turn\n";
             this->gameLog += this->lastTurn + player2.name + "Won the Turn\n";
         }
@@ -113,6 +117,8 @@ void Game::playTurn()
                 }
                 else
                 {
+                    cout << "fourth P1: " << player1.stacksize() << endl;
+                    cout << "fourth P2: " << player1.stacksize() << endl;
                     player1.addDraw();
                     player2.addDraw();
                     cards.push_back(card1);
@@ -128,13 +134,19 @@ void Game::playTurn()
                     this->player1.removeCard();
                     this->player2.removeCard();
                     this->totalTurns++;
+                    cout << "fifth P1: " << player1.stacksize() << endl;
+                    cout << "fifth P2: " << player1.stacksize() << endl;
                     if (card1.getValue() > card2.getValue())
                     {
                         for (int i = cards.size(); i > 0; i--)
                         {
                             cards.pop_back();
-                            player1.addCardsWon();
+                            if (i % 2 == 0)
+                            {
+                                player2.addCardsWon();
+                            }
                         }
+                        cout << "sixth P1: " << player1.stacksize() << endl;
                         this->lastTurn = this->player1.name + " Won The Turn\n";
                         this->gameLog += this->lastTurn + player1.name + "Won the Turn\n";
                     }
@@ -148,12 +160,17 @@ void Game::playTurn()
                                 player2.addCardsWon();
                             }
                         }
+                        cout << "seventh P2: " << player1.stacksize() << endl;
                         this->lastTurn = this->player2.name + " Won The Turn\n";
                         this->gameLog += this->lastTurn + player2.name + "Won the Turn\n";
                     }
                     else
                     {
-                        continue;
+
+                        for (int i = cards.size(); i > 0; i--)
+                        {
+                            cards.pop_back();
+                        }
                     }
                 }
             }
@@ -165,8 +182,28 @@ void Game::playTurn()
 
 void Game::printStats()
 {
-    player1.printStats();
-    player2.printStats();
+    cout << "Player 1 name: " << player1.name << endl;
+    cout << "Player 2 name: " << player2.name << endl;
+    cout << "Total games: " << totalGames << endl;
+    cout << "Total wins Player 1: " << player1.totalWins << endl;
+    cout << "Total wins Player 2: " << player2.totalWins << endl;
+    cout << "Player 1 Win rate: " << (player1.totalWins / totalGames) * 100 << "%" << endl;
+    cout << "Total draws: " << totalDraw << endl;
+    cout << "Total draws won Player 1 : " << player1.drawsWon << endl;
+    cout << "Total draws won Player 2 : " << player2.drawsWon << endl;
+    if (totalDraw == 0)
+    {
+        cout << "Draw win rate Player 1: " << 0 << "%" << endl;
+        cout << "Draw win rate Player 2: " << 0 << "%" << endl;
+    }
+    else
+    {
+        cout << "Draw win rate Player 1: " << (player1.drawsWon / totalDraw) * 100 << "%" << endl;
+        cout << "Draw win rate Player 2: " << (player2.drawsWon / totalDraw) * 100 << "%" << endl;
+    }
+    cout << "Total cards won Player 1: " << player1.cardesTaken() << endl;
+    cout << "Total cards won Player 2: " << player2.cardesTaken() << endl;
+    cout << "Total turns: " << totalTurns << endl;
 };
 
 void Game::printWiner()
@@ -205,9 +242,10 @@ string Game::printLastTurn()
 void Game::playAll()
 {
 
-    while (totalTurns < 26)
+    while (player1.stacksize() != 0 && player2.stacksize() != 0)
     {
         this->playTurn();
         totalTurns++;
     }
+    printWiner();
 };

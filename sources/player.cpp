@@ -42,13 +42,12 @@ void Player::addWin()
 
 void Player::addCardsWon()
 {
-    cardsWon++;
+    cardsWon = cardsWon + 2;
 };
 
 void Player::addTurnsNum()
 {
     turnsNum++;
-  
 };
 
 void Player::addDraw()
@@ -61,7 +60,7 @@ void Player::addDrawWon()
     drawsWon++;
 };
 
-string Player::printStats()
+void Player::printStats()
 {
     cout << "Player name: " << name << endl;
     cout << "Total games: " << totalGames << endl;
@@ -69,10 +68,16 @@ string Player::printStats()
     cout << "Win rate: " << (totalWins / totalGames) * 100 << "%" << endl;
     cout << "Total draws: " << totalDraw << endl;
     cout << "Total draws won: " << drawsWon << endl;
-    cout << "Draw win rate: " << (drawsWon / totalDraw) * 100 << "%" << endl;
+    if (totalDraw == 0)
+    {
+        cout << "Draw win rate: " << 0 << "%" << endl;
+    }
+    else
+    {
+        cout << "Draw win rate: " << (drawsWon / totalDraw) * 100 << "%" << endl;
+    }
     cout << "Total cards won: " << cardsWon << endl;
     cout << "Total turns: " << turnsNum << endl;
-    return "";
 };
 
 int Player::cardesTaken() { return cardsWon; };

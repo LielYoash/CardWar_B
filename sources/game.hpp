@@ -16,6 +16,7 @@ class Game
         Player& player1;
         Player& player2;
         int totalTurns = 0;
+        int totalGames = 0;
         string gameLog;
         string lastTurn;
         vector<Card> cards;
@@ -23,8 +24,8 @@ class Game
         void dealCards();
         void createDeck();
         void playTurn();
-        string printStats();
-        string printWiner();
+        void printStats();
+        void printWiner();
         string printLog();
         string printLastTurn();
         void playAll();

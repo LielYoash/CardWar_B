@@ -34,7 +34,7 @@ public:
     int stacksize();
     int cardesTaken();
     void removeCard();
-    string printStats();
+    void printStats();
 };
 
 #endif /* Player_hpp */

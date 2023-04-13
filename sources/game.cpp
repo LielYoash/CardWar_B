@@ -66,6 +66,9 @@ Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2)
     createDeck();
     shuffleDeck();
     dealCards();
+    player1.addGame();
+    player2.addGame();
+    totalGames++;
 
     this->gameLog = "";
     this->lastTurn = "";
@@ -85,28 +88,20 @@ void Game::playTurn()
     {
         Card card1 = this->player1.getCard();
         Card card2 = this->player2.getCard();
-        cards.push_back(card1);
-        cards.push_back(card2);
         this->player1.removeCard();
         this->player2.removeCard();
-        this->player1.addTurnsNum();
-        this->player2.addTurnsNum();
         this->totalTurns++;
         if (card1.getValue() > card2.getValue())
         {
             this->player1.addCardsWon();
-            this->player1.addCard(card1);
-            this->player1.addCard(card2);
-            this->lastTurn = this->player1.name + " Won The Turn";
-            this->gameLog += this->lastTurn + player1.name + "Won the Turn";
+            this->lastTurn = this->player1.name + " Won The Turn\n";
+            this->gameLog += this->lastTurn + player1.name + "Won the Turn\n";
         }
         else if (card1.getValue() < card2.getValue())
         {
             this->player2.addCardsWon();
-            this->player2.addCard(card1);
-            this->player2.addCard(card2);
-            this->lastTurn = this->player2.name + " Won The Turn";
-            this->gameLog += this->lastTurn + player2.name + "Won the Turn";
+            this->lastTurn = this->player2.name + " Won The Turn\n";
+            this->gameLog += this->lastTurn + player2.name + "Won the Turn\n";
         }
         else
         {
@@ -120,36 +115,41 @@ void Game::playTurn()
                 {
                     player1.addDraw();
                     player2.addDraw();
+                    cards.push_back(card1);
+                    cards.push_back(card2);
+                    cards.push_back(this->player1.getCard());
+                    cards.push_back(this->player2.getCard());
+                    this->player1.removeCard();
+                    this->player2.removeCard();
                     card1 = this->player1.getCard();
                     card2 = this->player2.getCard();
                     cards.push_back(card1);
                     cards.push_back(card2);
                     this->player1.removeCard();
                     this->player2.removeCard();
-                    this->player1.addTurnsNum();
-                    this->player2.addTurnsNum();
                     this->totalTurns++;
                     if (card1.getValue() > card2.getValue())
                     {
-                        this->player1.addCardsWon();
-                        while (!cards.empty())
+                        for (int i = cards.size(); i > 0; i--)
                         {
-                            this->player1.addCard(cards.back());
                             cards.pop_back();
+                            player1.addCardsWon();
                         }
-                        this->lastTurn = this->player1.name + " Won The Turn";
-                        this->gameLog += this->lastTurn + player1.name + "Won the Turn";
+                        this->lastTurn = this->player1.name + " Won The Turn\n";
+                        this->gameLog += this->lastTurn + player1.name + "Won the Turn\n";
                     }
                     else if (card1.getValue() < card2.getValue())
                     {
-                        this->player2.addCardsWon();
-                        while (!cards.empty())
+                        for (int i = cards.size(); i > 0; i--)
                         {
-                            this->player2.addCard(cards.back());
                             cards.pop_back();
+                            if (i % 2 == 0)
+                            {
+                                player2.addCardsWon();
+                            }
                         }
-                        this->lastTurn = this->player2.name + " Won The Turn";
-                        this->gameLog += this->lastTurn + player2.name + "Won the Turn";
+                        this->lastTurn = this->player2.name + " Won The Turn\n";
+                        this->gameLog += this->lastTurn + player2.name + "Won the Turn\n";
                     }
                     else
                     {
@@ -163,14 +163,13 @@ void Game::playTurn()
     }
 }
 
-string Game::printStats()
+void Game::printStats()
 {
-    cout << player1.printStats() << endl;
-    cout << player2.printStats() << endl;
-    return "";
+    player1.printStats();
+    player2.printStats();
 };
 
-string Game::printWiner()
+void Game::printWiner()
 {
     if (player1.stacksize() == 0 && player2.stacksize() == 0)
     {
@@ -178,40 +177,37 @@ string Game::printWiner()
         {
             player1.addWin();
             cout << "The Winner Is: " + player1.name << endl;
-            player1.addGame();
-            player2.addGame();
         }
         else
         {
             player2.addWin();
             cout << "The Winner Is: " + player2.name << endl;
-            player1.addGame();
-            player2.addGame();
         }
     }
     else
     {
         cout << "No Winner Yet" << endl;
     }
-    return "";
 };
 
 string Game::printLog()
 {
     cout << this->gameLog << endl;
-    return "";
+    return gameLog;
 };
 
 string Game::printLastTurn()
 {
     cout << this->lastTurn << endl;
-    return "";
+    return lastTurn;
 };
 
 void Game::playAll()
 {
-    while (totalTurns<26)
+
+    while (totalTurns < 26)
     {
         this->playTurn();
+        totalTurns++;
     }
 };

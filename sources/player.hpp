@@ -33,6 +33,7 @@ public:
     void addWin();
     int stacksize();
     int cardesTaken();
+    void addSingleCardWon();
     void removeCard();
     void printStats();
 };

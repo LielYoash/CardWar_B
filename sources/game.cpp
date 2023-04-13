@@ -91,19 +91,15 @@ void Game::playTurn()
         Card card2 = this->player2.getCard();
         this->player1.removeCard();
         this->player2.removeCard();
-        cout << "first P1: " << player1.stacksize() << endl;
-        cout << "first P2: " << player1.stacksize() << endl;
         if (card1.getValue() > card2.getValue())
         {
             this->player1.addCardsWon();
-            cout << "second P1: " << player1.stacksize() << endl;
             this->lastTurn = this->player1.name + " Won The Turn\n";
             this->gameLog += this->lastTurn + player1.name + "Won the Turn\n";
         }
         else if (card1.getValue() < card2.getValue())
         {
             this->player2.addCardsWon();
-            cout << "third P2: " << player1.stacksize() << endl;
             this->lastTurn = this->player2.name + " Won The Turn\n";
             this->gameLog += this->lastTurn + player2.name + "Won the Turn\n";
         }
@@ -111,14 +107,20 @@ void Game::playTurn()
         {
             while (card1.getValue() == card2.getValue())
             {
+                if(this->player1.stacksize()<2 || this->player2.stacksize()<2){
+                    player1.addCardsWon();
+                    player1.addSingleCardWon();
+                    player1.removeCard();
+                    player2.addCardsWon();
+                    player2.addSingleCardWon();
+                    player2.removeCard(); 
+                }
                 if (this->player1.stacksize() == 0 || this->player2.stacksize() == 0)
                 {
                     break;
                 }
                 else
                 {
-                    cout << "fourth P1: " << player1.stacksize() << endl;
-                    cout << "fourth P2: " << player1.stacksize() << endl;
                     player1.addDraw();
                     player2.addDraw();
                     cards.push_back(card1);
@@ -134,8 +136,6 @@ void Game::playTurn()
                     this->player1.removeCard();
                     this->player2.removeCard();
                     this->totalTurns++;
-                    cout << "fifth P1: " << player1.stacksize() << endl;
-                    cout << "fifth P2: " << player1.stacksize() << endl;
                     if (card1.getValue() > card2.getValue())
                     {
                         for (int i = cards.size(); i > 0; i--)
@@ -146,7 +146,6 @@ void Game::playTurn()
                                 player2.addCardsWon();
                             }
                         }
-                        cout << "sixth P1: " << player1.stacksize() << endl;
                         this->lastTurn = this->player1.name + " Won The Turn\n";
                         this->gameLog += this->lastTurn + player1.name + "Won the Turn\n";
                     }
@@ -160,7 +159,6 @@ void Game::playTurn()
                                 player2.addCardsWon();
                             }
                         }
-                        cout << "seventh P2: " << player1.stacksize() << endl;
                         this->lastTurn = this->player2.name + " Won The Turn\n";
                         this->gameLog += this->lastTurn + player2.name + "Won the Turn\n";
                     }
@@ -208,22 +206,17 @@ void Game::printStats()
 
 void Game::printWiner()
 {
-    if (player1.stacksize() == 0 && player2.stacksize() == 0)
+    if (player1.cardesTaken() > player2.cardesTaken())
     {
-        if (player1.cardesTaken() > player2.cardesTaken())
-        {
-            player1.addWin();
-            cout << "The Winner Is: " + player1.name << endl;
-        }
-        else
-        {
-            player2.addWin();
-            cout << "The Winner Is: " + player2.name << endl;
-        }
+        cout << "The winner is: " << player1.name << endl;
+    }
+    else if (player1.cardesTaken() < player2.cardesTaken())
+    {
+        cout << "The winner is: " << player2.name << endl;
     }
     else
     {
-        cout << "No Winner Yet" << endl;
+        cout << "Tie" << endl;
     }
 };
 
@@ -247,5 +240,4 @@ void Game::playAll()
         this->playTurn();
         totalTurns++;
     }
-    printWiner();
 };

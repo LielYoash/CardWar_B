@@ -22,7 +22,7 @@ class Game
         string gameLog;
         string lastTurn;
         vector<Card> cards;
-        Game(Player &p1, Player &p2);
+        Game(Player &playa1, Player &playa2);
         void dealCards();
         void createDeck();
         void playTurn();

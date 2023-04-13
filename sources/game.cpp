@@ -91,6 +91,7 @@ void Game::playTurn()
         this->player2.removeCard();
         this->player1.addTurnsNum();
         this->player2.addTurnsNum();
+        this->totalTurns++;
         if (card1.getValue() > card2.getValue())
         {
             this->player1.addCardsWon();
@@ -127,6 +128,7 @@ void Game::playTurn()
                     this->player2.removeCard();
                     this->player1.addTurnsNum();
                     this->player2.addTurnsNum();
+                    this->totalTurns++;
                     if (card1.getValue() > card2.getValue())
                     {
                         this->player1.addCardsWon();
@@ -208,7 +210,7 @@ string Game::printLastTurn()
 
 void Game::playAll()
 {
-    while (this->player1.stacksize() != 52 || this->player2.stacksize() != 52)
+    while (totalTurns<26)
     {
         this->playTurn();
     }

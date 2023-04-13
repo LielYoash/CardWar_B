@@ -15,6 +15,7 @@ class Game
     public:
         Player& player1;
         Player& player2;
+        int totalTurns = 0;
         string gameLog;
         string lastTurn;
         vector<Card> cards;
